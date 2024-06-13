@@ -40,6 +40,12 @@ resource "azurerm_resource_group" "rg" {
   name     = "${var.app_name}rg"
   location = var.location
 }
+resource "azurerm_public_ip" "NifiLoadbalancerIP" {
+  name                = "NifiLoadbalancerIP"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+}
 
 resource "azurerm_kubernetes_cluster" "main" {
   name                = "${var.app_name}aks"
@@ -75,6 +81,13 @@ resource "azurerm_storage_account" "nifi" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_storage_container" "nifi_registry_flows" {
+  name                  = "nifi-registry-flows"
+  storage_account_name  = azurerm_storage_account.nifi.name
+  container_access_type = "private"
+}
+
+
 resource "kubernetes_namespace" "nifi" {
   depends_on = [azurerm_kubernetes_cluster.main]
   metadata {
@@ -94,6 +107,8 @@ resource "kubernetes_secret" "storage_account_credentials" {
   }
   type = "Opaque"
 }
+
+
 
 resource "helm_release" "nifi" {
   depends_on = [azurerm_kubernetes_cluster.main]
