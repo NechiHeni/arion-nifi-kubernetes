@@ -76,8 +76,8 @@ resource "kubernetes_namespace" "nifi" {
 
 resource "azurerm_public_ip" "nifi_lb_ip" {
   name                = "nifi-lb-ip"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = "MC_arionnifirg_arionnifiaks_eastus"
+  location            = "East US"
   allocation_method   = "Static"
 }
 
