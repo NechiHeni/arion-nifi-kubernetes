@@ -67,39 +67,11 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 }
 
-resource "azurerm_storage_account" "nifi" {
-  name                     = "${var.app_name}nifisa"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-}
-
-resource "azurerm_storage_container" "nifi_registry_flows" {
-  name                  = "nifi-registry-flows"
-  storage_account_name  = azurerm_storage_account.nifi.name
-  container_access_type = "private"
-}
-
-
 resource "kubernetes_namespace" "nifi" {
   depends_on = [azurerm_kubernetes_cluster.main]
   metadata {
     name = "nifi"
   }
-}
-
-resource "kubernetes_secret" "storage_account_credentials" {
-  depends_on = [azurerm_kubernetes_cluster.main]
-  metadata {
-    name      = "storage-account-credentials"
-    namespace = kubernetes_namespace.nifi.metadata[0].name 
-  }
-  data = {
-    azurestorageaccountname = azurerm_storage_account.nifi.name
-    azurestorageaccountkey  = azurerm_storage_account.nifi.primary_access_key
-  }
-  type = "Opaque"
 }
 
 resource "azurerm_public_ip" "nifi_lb_ip" {
@@ -119,7 +91,7 @@ resource "helm_release" "nifi" {
   timeout = 600
   wait = false
   atomic = false
-  
+
   set {
     name  = "service.loadBalancerIP"
     value = azurerm_public_ip.nifi_lb_ip.ip_address
