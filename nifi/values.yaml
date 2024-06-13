@@ -118,7 +118,7 @@ headless:
 service:
   type: LoadBalancer
   httpsPort: 8443
-  LoadBalancerIP: 74.235.253.110
+  LoadBalancerIP: ""
   # nodePort: 30236
   annotations:
     {}

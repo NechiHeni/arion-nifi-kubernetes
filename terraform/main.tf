@@ -102,7 +102,12 @@ resource "kubernetes_secret" "storage_account_credentials" {
   type = "Opaque"
 }
 
-
+resource "azurerm_public_ip" "nifi_lb_ip" {
+  name                = "nifi-lb-ip"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Static"
+}
 
 resource "helm_release" "nifi" {
   depends_on = [azurerm_kubernetes_cluster.main]
@@ -114,6 +119,11 @@ resource "helm_release" "nifi" {
   timeout = 600
   wait = false
   atomic = false
+  
+  set {
+    name  = "service.loadBalancerIP"
+    value = azurerm_public_ip.nifi_lb_ip.ip_address
+  }
 }
 
 
