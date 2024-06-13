@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy-nifi-aks:
+  deploy-nifi:
     runs-on: ubuntu-latest
 
     steps:
