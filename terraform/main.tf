@@ -85,5 +85,3 @@ resource "helm_release" "nifi" {
   wait = false
   atomic = false
 }
-
-
