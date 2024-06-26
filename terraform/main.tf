@@ -74,13 +74,6 @@ resource "kubernetes_namespace" "nifi" {
   }
 }
 
-resource "azurerm_public_ip" "nifi_lb_ip" {
-  name                = "nifi-lb-ip"
-  resource_group_name = "MC_arionnifirg_arionnifiaks_eastus"
-  location            = "East US"
-  allocation_method   = "Static"
-}
-
 resource "helm_release" "nifi" {
   depends_on = [azurerm_kubernetes_cluster.main]
   name       = "nifi"
@@ -91,11 +84,6 @@ resource "helm_release" "nifi" {
   timeout = 600
   wait = false
   atomic = false
-
-  set {
-    name  = "service.loadBalancerIP"
-    value = azurerm_public_ip.nifi_lb_ip.ip_address
-  }
 }
 
 
