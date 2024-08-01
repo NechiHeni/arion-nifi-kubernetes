@@ -32,7 +32,6 @@ sts:
     failureThreshold: 60
     periodSeconds: 10
 
-
 properties:
   
   sensitiveKey: changeMechangeMe 

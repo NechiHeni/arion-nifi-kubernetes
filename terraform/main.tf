@@ -71,7 +71,6 @@ resource "kubernetes_namespace" "nifi" {
     name = "nifi"
   }
 }
-
 resource "helm_release" "nifi" {
   depends_on = [azurerm_kubernetes_cluster.main]
   name       = "nifi"
