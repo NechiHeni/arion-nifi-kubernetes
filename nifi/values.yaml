@@ -41,7 +41,7 @@ properties:
   externalSecure: false
   isNode: false
   httpsPort: 8443
-  webProxyHost: 52.186.100.29:8443
+  webProxyHost: 135.237.20.155:8443
   clusterPort: 6007
   zkClientEnsembleTraker: false # https://issues.apache.org/jira/browse/NIFI-10481
   clusterNodeConnectionTimeout: "5 sec"
